@@ -3,9 +3,12 @@ require('dotenv').config(); //Cargar las variables de entorno
 const express = require('express');
 const helmet = require('helmet'); //Se importa libreria de seguridad 
 const cors = require('cors'); //conectividad
+const connectDB = require('./db'); //Base de Datos
 // Se crea una instancia de express. 
 // 'app' ahora contiene todos los métodos para configurar el servidor
 const app = express();
+// Ejecutar la conexión a la base de datos
+connectDB();
 //Middlewares de seguridad, datos y comunicacion con front
 app.use(helmet());
 app.use(cors());
