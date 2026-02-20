@@ -1,7 +1,5 @@
-const mongoose = require('mongoose');
-const bcrypt = require('dcrypt');
-const { lowercase, date } = require('zod');
-const { use } = require('react');
+import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 
 const userSchema = new mongoose.Schema({
@@ -81,6 +79,7 @@ const userSchema = new mongoose.Schema({
     timestamps: true // Agrega createdAt y updatedAt automáticamente
 });
 
+
 //Middlewares de Mongoose
 //Encriptacion de contraseña 
 userSchema.pre('save', async function(next){  //Funcion antes del guardado
@@ -88,14 +87,13 @@ userSchema.pre('save', async function(next){  //Funcion antes del guardado
     const salt = await bcrypt.genSalt(10); // Mezclara la contraseña 10 veces 
     this.password = await bcrypt.hash(this.password, salt);
     if (this.isNew){
-        this.passwordChangedAt = date.now() - 1000;  
+        this.passwordChangedAt = Date.now() - 1000;  
     }
-    next();
+    
 });
 
 //Comparacion de contraseñas
 userSchema.methods.matchPassword = async function (enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 }
-
-module.exports = mongoose.model('User', userSchema);
+export default mongoose.model('User', userSchema);
