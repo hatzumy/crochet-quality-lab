@@ -6,7 +6,7 @@ import express from 'express';
 import helmet from 'helmet'; // Seguridad
 import cors from 'cors'; // Conectividad
 import rateLimit from 'express-rate-limit';
-import mongoSanitize from 'express-mongo-sanitize';
+//import mongoSanitize from 'express-mongo-sanitize';
 import hpp from 'hpp';
 import { connectDB } from './db.js'; //Base de Datos
 // Se crea una instancia de express. 
@@ -28,13 +28,14 @@ const limiter = rateLimit({
   max: 100,
   message: '⛔ Demasiadas peticiones desde esta IP, intenta de nuevo en 10 minutos.'
 });
-app.use('/api', limiter, authRoutes);
+
 // BODY PARSER: Leer JSON del cuerpo de la petición
 app.use(express.json({ limit: '10kb' })); // Límite de 10kb para evitar saturación
-
+app.use(express.urlencoded({ extended: true }));
 // MONGO SANITIZE: Previene inyección NoSQL (Borra signos $ y puntos)
-app.use(mongoSanitize());
+//app.use(mongoSanitize());
 
+app.use('/api', limiter, authRoutes);
 // HPP: Previene contaminación de parámetros (ej: ?sort=a&sort=b)
 app.use(hpp());
 

@@ -42,6 +42,9 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false // Empieza falso hasta que confirme el email
     },
+    verificationToken: {
+    type: String
+    },
     status: {
     type: String,
     enum: ['active', 'suspended', 'banned', 'blocked'],
@@ -82,8 +85,8 @@ const userSchema = new mongoose.Schema({
 
 //Middlewares de Mongoose
 //Encriptacion de contraseña 
-userSchema.pre('save', async function(next){  //Funcion antes del guardado
-    if(!this.isModified('password')) return next(); // Si no se modifica se salta el proceso
+userSchema.pre('save', async function(){  //Funcion antes del guardado
+    if(!this.isModified('password')) return ; // Si no se modifica se salta el proceso
     const salt = await bcrypt.genSalt(10); // Mezclara la contraseña 10 veces 
     this.password = await bcrypt.hash(this.password, salt);
     if (this.isNew){

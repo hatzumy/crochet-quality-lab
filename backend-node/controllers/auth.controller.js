@@ -1,9 +1,11 @@
 import User from "../models/User.js";//Modelo de la BD
 import bcrypt from 'bcryptjs';//Encriptacion 
 import { z } from 'zod';
+import crypto from 'crypto';
 
 //Reglas (Criterios de aceptacion)
 import {registerSchema} from '../schemas/auth.schema.js'; 
+
 
 export const register = async (req, res) => {
     try {
@@ -19,11 +21,13 @@ export const register = async (req, res) => {
         }
 
         const passwordHash = await bcrypt.hash (password, 10);//Encripta la contraseña
+        const verificationToken = crypto.randomBytes(32).toString('hex');
         //Guardado en BD 
         const newUser = new User({ 
             username, 
             email, 
-            password: passwordHash
+            password: passwordHash,
+            verificationToken
         });
 
         const userSaved = await newUser.save(); 
@@ -31,7 +35,9 @@ export const register = async (req, res) => {
         res.status(201).json({
             id: userSaved.id,
             username: userSaved.username,
-            email: "¡Usuario registrado exitosamente"
+            email: userSaved.email,
+            token: verificationToken,
+            message: "¡Usuario registrado exitosamente"
         });
     } catch (error) {
         if(error instanceof z.ZodError){
@@ -45,3 +51,30 @@ export const register = async (req, res) => {
     }  
 };
 
+export const verifyEmail = async (req, res) =>{
+
+    try {
+        const {token} = req.params;
+
+        const user = await User.findOne({ verificationToken: token});
+        if (!user) {
+            return res.status(400).json({ message: "El token es inválido o ya ha expirado." });
+        }
+
+        user.isVerified = true;
+        user.verificationToken = undefined;
+        await user.save();
+        res.status(200).json({ message: "¡Cuenta verificada con exito!"});
+    }
+     catch (error) {
+        //res.status(500).json({message: "Error al verificar el correo"});
+        console.error("CRASH EN VERIFICACIÓN:", error); 
+        
+        // Mandarlo a Postman temporalmente para leerlo
+        res.status(500).json({ 
+        message: "Error al verificar el correo.", 
+        detalle: error.message 
+        });
+        
+    }
+}

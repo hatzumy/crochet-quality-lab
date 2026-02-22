@@ -24,4 +24,5 @@ export const registerSchema = z.object({
     .regex(/[a-z]/, "Debe contener al menos una letra minúscula")
     .regex(/[0-9]/, "Debe contener al menos un número")
     .regex(/[\W_]/, "Debe contener al menos un carácter especial (ej: !@#$%)")
+
 });
