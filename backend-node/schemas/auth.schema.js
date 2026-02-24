@@ -2,27 +2,24 @@
 import { z } from 'zod';
 
 export const registerSchema = z.object({
-    username: z.string({
-        required_error: "El nombre de usuario es obligatorio"
-    })
-        .min(3, "El nombre debe contener mas de 3 letras")
-        .max(15, "El nombre debe contener menos de 18 letras")
-        .regex(/^[a-zA-ZñÑ0-9_-]+$/, { 
-            message: "El usuario solo puede contener letras y números (sin espacios)" 
-        })
+    username: z.string({ required_error: "auth.username_required" })
+        .min(3, { message: "auth.username_too_short" })
+        .max(15, { message: "auth.username_too_long" })
+        .regex(/^[a-zA-ZñÑ0-9_-]+$/, { message: "auth.username_invalid_format" })
         .trim(),
-//EMAIL: Regex Robusta (Estándar RFC 5322 simplificado)
-    email: z.string({
-        required_error: "El correo es obligatorio"
-    })
-        .regex(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,"Correo inválido o formato no soportado"),
 
-    password: z.string({ required_error: "La contraseña es obligatoria" })
-    .min(8, "La contraseña debe tener al menos 8 caracteres") // Estándar actual
-    .max(20, "La contraseña es demasiado larga") // Prevención de ataque DoS (Buffer Overflow)
-    .regex(/[A-Z]/, "Debe contener al menos una letra MAYÚSCULA")
-    .regex(/[a-z]/, "Debe contener al menos una letra minúscula")
-    .regex(/[0-9]/, "Debe contener al menos un número")
-    .regex(/[\W_]/, "Debe contener al menos un carácter especial (ej: !@#$%)")
+    email: z.string({ required_error: "auth.email_required" })
+       
+        .regex(
+            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, 
+            { message: "auth.email_invalid" } 
+        ),
 
+    password: z.string({ required_error: "auth.password_required" })
+        .min(8, { message: "auth.password_too_short" })
+        .max(20, { message: "auth.password_too_long" })
+        .regex(/[A-Z]/, { message: "auth.password_uppercase" })
+        .regex(/[a-z]/, { message: "auth.password_lowercase" })
+        .regex(/[0-9]/, { message: "auth.password_number" })
+        .regex(/[\W_]/, { message: "auth.password_special" })
 });
