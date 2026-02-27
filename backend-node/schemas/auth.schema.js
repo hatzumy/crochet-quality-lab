@@ -8,7 +8,7 @@ export const registerSchema = z.object({
     .regex(/^[a-zA-ZñÑ0-9_-]+$/, { message: 'auth.username_invalid_format' })
     .trim(),
 
-  email: z.string.email({ required_error: 'auth.email_invalid' }),
+  email: z.string().email({ required_error: 'auth.email_invalid' }),
 
   password: z.string({ required_error: 'auth.password_required' })
     .min(8, { message: 'auth.password_too_short' })
