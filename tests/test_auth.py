@@ -18,10 +18,13 @@ def test_registro_y_verificacion_email(playwright):
     
     # Datos únicos para evitar el error de "email duplicado"
     timestamp = str(int(time.time() * 1000))[-6:]
+    prefix = "QAtest"
+    secret_suffix = "*"
+    dynamic_pass = f"{prefix}_{timestamp}{secret_suffix}"
     user_data = {
         "username": f"Tejedora_{timestamp}",
         "email": f"qa_{timestamp}@crochetlab.com",
-        "password": f"QAtest_{timestamp}*"
+        "password": dynamic_pass
     }
 
     # --- REGISTRO ---
