@@ -14,9 +14,8 @@ export const validateSchema = (schema) => (req, res, next) => {
     else if (typeof error.message === 'string') {
       try {
         const parsed = JSON.parse(error.message);
-        if (Array.isArray(parsed)) zErrors = parsed;
-      } catch (e) {
-        
+        if (Array.isArray(parsed)) {zErrors = parsed;}
+      } catch (error) {
         return res.status(400).json({ status: 'Error', message: error.message });
       }
     }

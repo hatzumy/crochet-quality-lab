@@ -3,12 +3,11 @@ import dotenv from 'dotenv';
 dotenv.config();//Cargar las variables de entorno
 // Se importa la librería 'express' que permite crear el servidor web
 import express from 'express';
-import i18next from './config/i18n.config.js'; // Tu archivo de arriba
+import i18next from './config/i18n.config.js';
 import middleware from 'i18next-http-middleware';
 import helmet from 'helmet'; // Seguridad
 import cors from 'cors'; // Conectividad
 import rateLimit from 'express-rate-limit';
-//import mongoSanitize from 'express-mongo-sanitize';
 import hpp from 'hpp';
 import { connectDB } from './db.js'; //Base de Datos
 // Se crea una instancia de express. 
@@ -32,10 +31,6 @@ const limiter = rateLimit({
   max: 100,
   message: '⛔ Demasiadas peticiones desde esta IP, intenta de nuevo en 10 minutos.'
 });
-
-// MONGO SANITIZE: Previene inyección NoSQL (Borra signos $ y puntos)
-//app.use(mongoSanitize());
-
 app.use('/api', limiter, authRoutes);
 // HPP: Previene contaminación de parámetros (ej: ?sort=a&sort=b)
 app.use(hpp());
@@ -44,10 +39,10 @@ app.use(hpp());
 const PORT = process.env.PORT || 3000;
 // Se define la ruta,'req' (request) -->usuario, 'res' (response) --> respuesta.
 app.get ('/', (req, res) => {
-    res.send('Servidor funcionado'); //Se envia texto para validar que el servidor este funcionando 
+  res.send('Servidor funcionado'); //Se envia texto para validar que el servidor este funcionando 
 });
 
 //Se  enciende el servidor
 app.listen(PORT, () =>{
-    console .log(`Servidor corriendo en modo SEGURO en puerto ${PORT}`);
+  console .log(`Servidor corriendo en modo SEGURO en puerto ${PORT}`);// eslint-disable-line no-console
 });

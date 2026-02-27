@@ -111,3 +111,28 @@
 - [ ] Debe cruzar los datos extraídos con el **Inventario (US-03)** para validar disponibilidad en tiempo real.
 - [ ] Si la cantidad necesaria es mayor a la disponible, el sistema debe calcular y sugerir cuánto material falta comprar.
 - [ ] (QA) El sistema debe manejar conversiones automáticas si el patrón usa unidades distintas (ej: onzas a gramos).
+
+## Épica: Gestion de Roles 
+### US-09: Administrador de roles
+**Como** Administrador de crochetlab, 
+**quiero** gestionar usuarios para asignar roles, 
+**para** que el sistema pueda detectar su rol y muestre las respectivas funciones.
+
+### 📋 Criterios de Aceptación
+
+#### 🔹 Grupo 1: Funcionalidad de Gestión (UI/UX & Flujo)
+- [ ] **AC 01 - Listado de Usuarios:** El sistema debe permitir al Administrador visualizar una lista de todos los usuarios registrados con su rol actual visible.
+- [ ] **AC 02 - Asignación de Roles:** El Administrador debe poder seleccionar un usuario y cambiar su rol entre las opciones predefinidas: `admin`, `moderador`, `tejedora`.
+- [ ] **AC 03 - Notificación de Cambio:** El sistema debe mostrar un mensaje de confirmación exitosa en español cuando el rol haya sido actualizado correctamente.
+
+#### 🔹 Grupo 2: Reglas de Negocio y Seguridad (Backend & Auth)
+- [ ] **AC 04 - Rol por Defecto:** Todo nuevo registro de usuario debe ser asignado automáticamente con el rol `tejedora`.
+- [ ] **AC 05 - Restricción de Acceso (RBAC):** Solo los usuarios con rol `admin` pueden acceder a la ruta o panel de gestión de roles. Cualquier otro rol debe recibir un error `403 Forbidden`.
+- [ ] **AC 06 - Validación de Roles:** El sistema no debe procesar cambios hacia roles que no existan en el esquema oficial de la aplicación (Zod/Mongoose).
+- [ ] **AC 07 - Protección del Único Admin:** El sistema debe impedir que el último Administrador activo se cambie el rol a sí mismo o se elimine, para evitar el bloqueo del sistema.
+
+#### 🔹 Grupo 3: Integración y Persistencia (Datos)
+- [ ] **AC 08 - Inclusión en JWT:** El rol del usuario debe estar incluido dentro del *payload* del token JWT generado al iniciar sesión.
+- [ ] **AC 09 - Persistencia en Base de Datos:** El cambio de rol debe actualizarse de forma atómica en la colección de usuarios en MongoDB.
+
+
