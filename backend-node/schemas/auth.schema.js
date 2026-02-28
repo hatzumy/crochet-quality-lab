@@ -15,6 +15,6 @@ export const registerSchema = z.object({
     .max(20, { message: 'auth.password_too_long' })
     .regex(/[A-Z]/, { message: 'auth.password_uppercase' })
     .regex(/[a-z]/, { message: 'auth.password_lowercase' })
-    .regex(/[0-9]/, { message: 'auth.password_number' })
+    .regex(/\d/, { message: 'auth.password_number' })
     .regex(/[\W_]/, { message: 'auth.password_special' })
 });

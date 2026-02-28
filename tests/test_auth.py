@@ -4,10 +4,6 @@ import json
 import os
 from dotenv import load_dotenv
 
-#base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-#dotenv_path = os.path.join(base_dir, '.env')
-#load_dotenv(dotenv_path)
-
 def test_registro_y_verificacion_email(playwright):
 
     # dirección del servidor

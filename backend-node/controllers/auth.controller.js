@@ -1,6 +1,6 @@
 import User from '../models/User.js';//Modelo de la BD
 import { z } from 'zod';
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 
 //Reglas (Criterios de aceptacion)
 import {registerSchema} from '../schemas/auth.schema.js'; 
