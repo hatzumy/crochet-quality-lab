@@ -1,12 +1,3 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-echo "🧶 CrochetLab: Validando calidad..."
-
-# Usamos 'npm run' para asegurar que use la versión local del proyecto
-npm run lint || exit 1
-
-# Usamos 'npx' para Snyk por si no está global
-npx snyk test || exit 1
-
-echo "✅ ¡Calidad aprobada!"
+echo "🧶 CrochetLab: Validando calidad antes del commit..."
+npm run lint
+npx snyk test
