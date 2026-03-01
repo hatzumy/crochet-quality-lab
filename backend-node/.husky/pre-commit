@@ -1,10 +1,12 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-echo "🧶 CrochetLab: Validando calidad antes del commit..."
+echo "🧶 CrochetLab: Validando calidad..."
 
-# Ejecutar ESLint para asegurar código limpio
-npm run lint
+# Usamos 'npm run' para asegurar que use la versión local del proyecto
+npm run lint || exit 1
 
-# Ejecutar Snyk para asegurar que no se tengan vulnerabilidades nuevas
-snyk test
+# Usamos 'npx' para Snyk por si no está global
+npx snyk test || exit 1
+
+echo "✅ ¡Calidad aprobada!"
