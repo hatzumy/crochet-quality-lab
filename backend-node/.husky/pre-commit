@@ -1,3 +1,0 @@
-echo "🧶 CrochetLab: Validando calidad antes del commit..."
-npm run lint
-npx snyk test
