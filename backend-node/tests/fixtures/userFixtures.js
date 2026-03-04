@@ -1,0 +1,29 @@
+
+export const invalidUsernames = [
+  {case: 'esta vacio' , value: {}, field: 'username' , error: 'auth.username_required' },
+  {case: 'es menor de 3' , value: { username: 'aa' }, field: 'username' , error: 'auth.username_too_short' },
+  {case: 'es mayor de 15' , value: { username: 'teststeststestst' } , field: 'username' , error: 'auth.username_too_long' },
+  {case: 'tiene caracteres invalidos' , value: { username: 'test*' }, field: 'username' , error: 'auth.username_invalid_format' }
+    
+];
+
+export const invalidEmail = [
+
+  {case: 'esta vacio' , value: {}, field: 'email' , error: 'auth.email_required' },
+  {case: 'es invalido' , value: { email: 'test.com' } , field: 'email' , error: 'auth.email_invalid' }
+
+];
+
+export const invalidPassword = [
+
+  {case: 'esta vacia' , value: {}, field: 'password' , error: 'auth.password_required' },
+  {case: 'no cumple el minimo' , value: {password: 'test'}, field: 'password' , error: 'auth.password_too_short' },
+  {case: 'no cumple el maximo' , value: {password: 'test1234567890abcdefg'}, field: 'password' , error: 'auth.password_too_long' },
+  {case: 'no cumple con caracteres en mayuscula' , value: {password: 'test1234*'}, field: 'password' , error: 'auth.password_uppercase' },
+  {case: 'no cumple con caracteres en minuscula' , value: {password: 'TEST1234*'}, field: 'password' , error: 'auth.password_lowercase' },
+  {case: 'no cumple con numeros' , value: {password: 'TestTest*'}, field: 'password' , error: 'auth.password_number' },
+  {case: 'no cumple con caracteres especiales' , value: {password: 'TestTest1234'}, field: 'password' , error: 'auth.password_special' },
+   
+];
+
+
