@@ -16,13 +16,13 @@ export const invalidEmail = [
 
 export const invalidPassword = [
 
-  {case: 'esta vacia' , value: {}, field: 'password' , error: 'auth.password_required' },
-  {case: 'no cumple el minimo' , value: {password: 'test'}, field: 'password' , error: 'auth.password_too_short' },
-  {case: 'no cumple el maximo' , value: {password: 'test1234567890abcdefg'}, field: 'password' , error: 'auth.password_too_long' },
-  {case: 'no cumple con caracteres en mayuscula' , value: {password: 'test1234*'}, field: 'password' , error: 'auth.password_uppercase' },
-  {case: 'no cumple con caracteres en minuscula' , value: {password: 'TEST1234*'}, field: 'password' , error: 'auth.password_lowercase' },
-  {case: 'no cumple con numeros' , value: {password: 'TestTest*'}, field: 'password' , error: 'auth.password_number' },
-  {case: 'no cumple con caracteres especiales' , value: {password: 'TestTest1234'}, field: 'password' , error: 'auth.password_special' },
+  {case: 'esta vacia' , value: {}, field: 'password' , error: 'auth.password_required' }, 
+  {case: 'no cumple el minimo' , value: {password: 'test'}, field: 'password' , error: 'auth.password_too_short' }, // NOSONAR
+  {case: 'no cumple el maximo' , value: {password: 'test1234567890abcdefg'}, field: 'password' , error: 'auth.password_too_long' }, // NOSONAR
+  {case: 'no cumple con caracteres en mayuscula' , value: {password: 'test1234*'}, field: 'password' , error: 'auth.password_uppercase' }, // NOSONAR
+  {case: 'no cumple con caracteres en minuscula' , value: {password: 'TEST1234*'}, field: 'password' , error: 'auth.password_lowercase' }, // NOSONAR
+  {case: 'no cumple con numeros' , value: {password: 'TestTest*'}, field: 'password' , error: 'auth.password_number' }, // NOSONAR
+  {case: 'no cumple con caracteres especiales' , value: {password: 'TestTest1234'}, field: 'password' , error: 'auth.password_special' }, // NOSONAR
    
 ];
 
