@@ -25,6 +25,6 @@ export const verifyTokenSchema = z.object({
   token: z.string({
     message: 'auth.token_required'
   })
-  .length(64, 'auth.token_invalid')
-  .regex(/^[0-9a-fA-F]+$/, 'auth.token_invalid')
+    .length(64, 'auth.token_invalid')
+    .regex(/^[0-9a-fA-F]+$/, 'auth.token_invalid')
 });

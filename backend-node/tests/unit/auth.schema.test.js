@@ -46,12 +46,12 @@ describe('Validators: RegisterSchema - Bloque password', ()  => {
 }); 
 
 describe('Validators: RegisterSchema - HappyPath', () => {
-   test('Validar el Happy Path del registro', () => {
+  test('Validar el Happy Path del registro', () => {
     const data = happyPathValidate[0];
     ValidateField(data.value);
-   })
+  });
    
-})
+});
 
 describe('Validators: RegisterSchema - Token', ()  => {
   test.each(TokenValidation)(
