@@ -26,4 +26,17 @@ export const invalidPassword = [
    
 ];
 
+export const happyPathValidate = [
+
+  {value: {username: 'UserTest1', email: 'test@test.com', password: 'Test1234*'}} // NOSONAR
+
+]
+
+export const TokenValidation =  [
+  {case: 'Token esta vacio' , value: {}, field: 'token' , error: 'auth.token_required' }, 
+  {case: 'Token es un numero' , value: { token: 123 }, field: 'token' , error: 'auth.token_required' }, // NOSONAR
+  {case: 'Token - formato inválido' , value: { token: 'abc-123' }, field: 'token' , error: 'auth.token_invalid' },// NOSONAR
+  {case: 'Happy Path Token' , value: { token: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855' }, field: 'token' , error: null },// NOSONAR
+
+]
 

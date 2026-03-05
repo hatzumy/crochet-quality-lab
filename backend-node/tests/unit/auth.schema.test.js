@@ -1,6 +1,6 @@
 
-import { registerSchema } from '../../schemas/auth.schema.js';
-import {invalidUsernames, invalidEmail, invalidPassword } from '../fixtures/userFixtures.js';
+import { registerSchema, verifyTokenSchema } from '../../schemas/auth.schema.js';
+import {invalidUsernames, invalidEmail, invalidPassword, happyPathValidate, TokenValidation} from '../fixtures/userFixtures.js';
 
 /**
  * Helper para validar esquemas de Zod
@@ -45,8 +45,42 @@ describe('Validators: RegisterSchema - Bloque password', ()  => {
   );
 }); 
 
+describe('Validators: RegisterSchema - HappyPath', () => {
+   test('Validar el Happy Path del registro', () => {
+    const data = happyPathValidate[0];
+    ValidateField(data.value);
+   })
+   
+})
+
+describe('Validators: RegisterSchema - Token', ()  => {
+  test.each(TokenValidation)(
+    '$case',
+    ({value, field, error}) => {
+      ValidateToken (
+        value,
+        field, 
+        error);
+    }
+  );
+}); 
+
 const ValidateField = (input, field, expectedError) => {
   const result = registerSchema.safeParse(input);
+  if(expectedError){
+    expect(result.success).toBe(false);
+    const error = result.error.issues.find ( i => i.path.includes(field));
+    if(!error){
+      throw new Error(`Se esperaba un error en el campo "${field}" pero no se encontró.`);
+    }
+    expect(error.message).toBe(expectedError);
+  }else{
+    expect(result.success).toBe(true);
+  }
+};
+
+const ValidateToken = (input, field, expectedError) => {
+  const result = verifyTokenSchema.safeParse(input);
   if(expectedError){
     expect(result.success).toBe(false);
     const error = result.error.issues.find ( i => i.path.includes(field));

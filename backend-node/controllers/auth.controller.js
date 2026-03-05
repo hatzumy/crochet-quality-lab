@@ -3,7 +3,7 @@ import { z } from 'zod';
 import crypto from 'node:crypto';
 
 //Reglas (Criterios de aceptacion)
-import {registerSchema} from '../schemas/auth.schema.js'; 
+import {registerSchema, verifyTokenSchema} from '../schemas/auth.schema.js'; 
 
 
 export const register = async (req, res) => {
@@ -50,7 +50,14 @@ export const register = async (req, res) => {
 export const verifyEmail = async (req, res) =>{
 
   try {
-    const {token} = req.params;
+    const result = verifyTokenSchema.safeParse(req.params);
+
+    if (!result.success) {
+      return res.status(400).json({ 
+        message: result.error.issues[0].message // Retorna 'auth.token_invalid' o 'auth.token_required'
+      });
+    }
+    const {token} = result.data;
     const user = await User.findOne({
       verificationToken: {$eq: String(token)}
     });
