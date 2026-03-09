@@ -35,12 +35,13 @@ describe('Validators: RegisterSchema - Bloque email', ()  => {
 
 describe('Validators: RegisterSchema - Bloque password', ()  => {
   test.each(invalidPassword)(
-    'Falla si email  $case',
+    'Falla si password  $case',
     ({value, field, error}) => {
       ValidateField (
         value,
         field, 
         error);
+        console.log(value);
     }
   );
 }); 

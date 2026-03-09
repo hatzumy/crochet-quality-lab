@@ -10,13 +10,12 @@ export const register = async (req, res) => {
   try {
     const validateData = registerSchema.parse(req.body);
     const {username, email, password} = validateData;
-    const userFound = await User.findOne({email});//Busca email en BD
-    const usernameFound = await User.findOne({username});//Busca username en BD
-    if(userFound){
-      return res.status(400).json({ message: 'Este correo ya esta en uso en CrochetLab'});
-    }else if (usernameFound){
-      return res.status(400).json({ message: 'Este nombre de usuario ya esta en uso en CrochetLab'});
+    const userExists = await User.findOne({ $or: [{ email }, { username }] });
+    if (userExists) {
+        const field = userExists.email === email ? 'correo' : 'nombre de usuario';
+        return res.status(400).json({ message: `Este ${field} ya está en uso` });
     }
+  
 
     const verificationToken = crypto.randomBytes(32).toString('hex');
     //Guardado en BD 
@@ -30,7 +29,7 @@ export const register = async (req, res) => {
     const userSaved = await newUser.save(); 
 
     res.status(201).json({
-      id: userSaved.id,
+      id: userSaved._id,
       username: userSaved.username,
       email: userSaved.email,
       token: verificationToken,

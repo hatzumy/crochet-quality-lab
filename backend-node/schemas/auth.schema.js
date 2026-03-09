@@ -1,6 +1,10 @@
 
 import { z } from 'zod';
 
+export const userIdSchema = z.object({
+  id: z.string().uuid({ message: 'auth.invalid_user_id_format' })
+});
+
 export const registerSchema = z.object({
   username: z.string({ 
     error: 'auth.username_required'
@@ -10,7 +14,9 @@ export const registerSchema = z.object({
     .regex(/^[a-zA-ZñÑ0-9_-]+$/, { message: 'auth.username_invalid_format' })
     .trim(),
 
-  email: z.string({ error: 'auth.email_required' }).email('auth.email_invalid'),
+  email: z.string({ error: 'auth.email_required' })
+  .email('auth.email_invalid')
+  .toLowerCase(),
 
   password: z.string({ error: 'auth.password_required' })
     .min(8, { message: 'auth.password_too_short' })

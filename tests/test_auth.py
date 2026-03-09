@@ -42,7 +42,6 @@ def test_registro_y_verificacion_email(playwright):
     token_generado = register_body["token"]
 
     # --- VERIFICACIÓN POSITIVA ---
-    # Usamos la URL completa para no fallar
     verify_response = api_context.get(f"{BASE_URL}/verify-email/{token_generado}")
     
     assert verify_response.status == 200, f"Error en verificación: {verify_response.status}"
