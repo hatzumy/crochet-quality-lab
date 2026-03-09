@@ -12,8 +12,8 @@ export const register = async (req, res) => {
     const {username, email, password} = validateData;
     const userExists = await User.findOne({ $or: [{ email }, { username }] });
     if (userExists) {
-        const field = userExists.email === email ? 'correo' : 'nombre de usuario';
-        return res.status(400).json({ message: `Este ${field} ya está en uso` });
+      const field = userExists.email === email ? 'correo' : 'nombre de usuario';
+      return res.status(400).json({ message: `Este ${field} ya está en uso` });
     }
   
 

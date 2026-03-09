@@ -6,9 +6,9 @@ import { v4 as uuidv4 } from 'uuid';
 const userSchema = new mongoose.Schema({
   //AUTENTICACION
   _id: {
-        type: String,
-        default: () => uuidv4(),
-    },
+    type: String,
+    default: () => uuidv4(),
+  },
   username:{
     type:String,
     required: true,

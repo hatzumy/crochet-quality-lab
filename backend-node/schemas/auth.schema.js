@@ -15,8 +15,8 @@ export const registerSchema = z.object({
     .trim(),
 
   email: z.string({ error: 'auth.email_required' })
-  .email('auth.email_invalid')
-  .toLowerCase(),
+    .email('auth.email_invalid')
+    .toLowerCase(),
 
   password: z.string({ error: 'auth.password_required' })
     .min(8, { message: 'auth.password_too_short' })

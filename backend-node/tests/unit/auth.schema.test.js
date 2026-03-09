@@ -41,7 +41,6 @@ describe('Validators: RegisterSchema - Bloque password', ()  => {
         value,
         field, 
         error);
-        console.log(value);
     }
   );
 }); 
