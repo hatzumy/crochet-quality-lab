@@ -1,6 +1,8 @@
-import User from '../models/User.js';//Modelo de la BD
+import User from '../models/User.js';
+import Token from '../models/Token.js';
 import { z } from 'zod';
 import crypto from 'node:crypto';
+import 'dotenv/config';
 
 //Reglas (Criterios de aceptacion)
 import {registerSchema, verifyTokenSchema} from '../schemas/auth.schema.js'; 
@@ -16,23 +18,46 @@ export const register = async (req, res) => {
       return res.status(400).json({ message: `Este ${field} ya está en uso` });
     }
   
-
-    const verificationToken = crypto.randomBytes(32).toString('hex');
     //Guardado en BD 
     const newUser = new User({ 
       username, 
       email, 
-      password,
-      verificationToken
+      password
     });
-
     const userSaved = await newUser.save(); 
 
+    const verificationToken = crypto.randomBytes(32).toString('hex');
+
+    const newToken = new Token({
+      userId: userSaved._id,
+      token: verificationToken
+    });
+
+    const tokenSaved = await newToken.save();
+
+    try {
+      const n8nWebhookUrl = process.env.N8N_WEBHOOK_URL;
+      
+      fetch(n8nWebhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: userSaved.email,
+          username: userSaved.username,
+          token: verificationToken,
+          userId: userSaved._id
+        })
+      })
+        .then(() => console.log('📬 Webhook entregado a n8n'))// eslint-disable-line no-console
+        .catch(err => console.error('❌ Falló la entrega al Webhook:', err.message));// eslint-disable-line no-console
+    } catch (error) {
+      console.error('❌ Error enviando a n8n:', error.message);// eslint-disable-line no-console
+    }
+
     res.status(201).json({
-      id: userSaved._id,
       username: userSaved.username,
       email: userSaved.email,
-      token: verificationToken,
+      token: tokenSaved.token,
       message: '¡Usuario registrado exitosamente'
     });
   } catch (error) {
@@ -57,16 +82,25 @@ export const verifyEmail = async (req, res) =>{
       });
     }
     const {token} = result.data;
-    const user = await User.findOne({
-      verificationToken: {$eq: String(token)}
-    });
-    if (!user) {
+    const tokenDoc = await Token.findOne({ token: String(token) });
+    
+    if (!tokenDoc) {
       return res.status(400).json({ message: 'El token es inválido o ya ha expirado.' });
     }
 
+    const user = await User.findById(tokenDoc.userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'No se encontró la cuenta asociada al token.' });
+    }
+
+    if (user.isVerified) {
+      return res.status(400).json({ message: 'Esta cuenta ya ha sido verificada anteriormente.' });
+    }
+
     user.isVerified = true;
-    user.verificationToken = undefined;
     await user.save();
+    await Token.findByIdAndDelete(tokenDoc._id);
     res.status(200).json({ message: '¡Cuenta verificada con exito!'});
   }
   catch (error) {

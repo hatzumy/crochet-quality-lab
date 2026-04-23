@@ -47,9 +47,6 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false // Empieza falso hasta que confirme el email
   },
-  verificationToken: {
-    type: String
-  },
   status: {
     type: String,
     enum: ['active', 'suspended', 'banned', 'blocked'],
