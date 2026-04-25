@@ -3,6 +3,7 @@ import Token from '../models/Token.js';
 import { z } from 'zod';
 import crypto from 'node:crypto';
 import 'dotenv/config';
+import { sendVerificationEmail } from '../utils/n8nService.js';
 
 //Reglas (Criterios de aceptacion)
 import {registerSchema, verifyTokenSchema} from '../schemas/auth.schema.js'; 
@@ -35,31 +36,20 @@ export const register = async (req, res) => {
 
     const tokenSaved = await newToken.save();
 
-    try {
-      const n8nWebhookUrl = process.env.N8N_WEBHOOK_URL;
-      
-      fetch(n8nWebhookUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: userSaved.email,
-          username: userSaved.username,
-          token: verificationToken,
-          userId: userSaved._id
-        })
+      sendVerificationEmail({
+        email: userSaved.email,
+        username: userSaved.username,
+        token: verificationToken,
+        userId: userSaved._id
       })
-        .then(() => console.log('📬 Webhook entregado a n8n'))// eslint-disable-line no-console
-        .catch(err => console.error('❌ Falló la entrega al Webhook:', err.message));// eslint-disable-line no-console
-    } catch (error) {
-      console.error('❌ Error enviando a n8n:', error.message);// eslint-disable-line no-console
-    }
-
+      
     res.status(201).json({
       username: userSaved.username,
       email: userSaved.email,
       token: tokenSaved.token,
       message: '¡Usuario registrado exitosamente'
     });
+
   } catch (error) {
     if(error instanceof z.ZodError){
       return res.status(400).json({
@@ -110,5 +100,42 @@ export const verifyEmail = async (req, res) =>{
       detalle: error.message 
     });
         
+  }
+};
+
+export const resendEmail = async (req, res) =>{
+  try{
+    const {email} = req.body;
+    if (!email) {
+      return res.status(400).json({ message: 'El correo electrónico es requerido.' });
+    }
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: 'No existe el usuario' });
+    }
+    if (user.isVerified){
+      return res.status(400).json({ message: 'Cuenta ya verificada' });
+    }
+    await Token.deleteMany({ userId: user._id });
+    const verificationToken = crypto.randomBytes(32).toString('hex');
+    const newToken = new Token({
+      userId: user._id,
+      token: verificationToken
+    });
+    await newToken.save();
+
+    sendVerificationEmail({
+        email: user.email,
+        username: user.username,
+        token: verificationToken,
+        userId: user._id
+      })
+
+    res.status(200).json({ 
+      message: 'Se ha enviado un nuevo enlace de verificación a tu correo.' 
+    });
+
+  }catch (error){
+    res.status(500).json({ message: error.message });
   }
 };
