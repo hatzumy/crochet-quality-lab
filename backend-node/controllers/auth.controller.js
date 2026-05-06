@@ -106,10 +106,10 @@ export const verifyEmail = async (req, res) =>{
 export const resendEmail = async (req, res) =>{
   try{
     const {email} = req.body;
-    if (!email) {
-      return res.status(400).json({ message: 'El correo electrónico es requerido.' });
+    if (!email || typeof email !== 'string') { 
+      return res.status(400).json({ message: 'El correo electrónico es requerido y debe ser válido.' });
     }
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: String(email) });
     if (!user) {
       return res.status(400).json({ message: 'No existe el usuario' });
     }
