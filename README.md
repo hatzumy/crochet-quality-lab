@@ -12,9 +12,39 @@ Como parte de mi formación en **QA Automation**, este repositorio implementa:
 
 ## 🛠️ Tecnologías
 - **Backend:** Node.js, Express.
+- **Frontend:** React (Vite) + TypeScript.
 - **Base de Datos:** MongoDB.
+- **Microservicios/Workflows:** n8n (Automatización de correos).
 - **Seguridad:** Snyk, ESLint-plugin-security.
 - **Calidad:** SonarCloud.
+
+## Pruebas Automatizadas (E2E y UI)
+- **Playwright + TypeScript:** Framework principal para pruebas de extremo a extremo (E2E), simulación de múltiples navegadores y validación visual.
+- **Cypress:** Integrado como framework alternativo de pruebas frontend
+
+## Pruebas de API y Backend
+- **Jest + Supertest:** Pruebas unitarias y de integración directa a los controladores y rutas de Node.js.
+- **Postman + Newman:** Colecciones de pruebas de API automatizadas ejecutables desde la línea de comandos (CLI).
+
+## Pruebas de Rendimiento (Performance & Carga)
+- **k6:** Pruebas de carga modernas basadas en JavaScript para evaluar el rendimiento del servidor bajo estrés
+- **Apache JMeter:** Herramienta estándar de la industria para validación de estrés y carga masiva a nivel de hilos
+
+## Seguridad y Análisis Estático
+- **Snyk:** Escaneo de dependencias en busca de vulnerabilidades y fallos de seguridad (SCA).
+- **ESLint (Plugin Security):** Validación estática del código para prevenir malas prácticas y brechas comunes.
+- **SonarCloud:** Plataforma de Quality Gate para métricas de cobertura de código, bugs y code smells automatizada en el repositorio.
+- **Seguridad Frontend (DAST):** OWASP ZAP para escaneo dinámico de vulnerabilidades en la interfaz de usuario (XSS, Clickjacking, misconfigurations).
+
+## BDD y Metodologías de Pruebas
+- **Cucumber (Gherkin):** Definición de casos de prueba en lenguaje natural (inglés técnico)
+
+## Futuras Implementaciones
+- **Integración Continua (CI/CD):** Implementación de GitHub Actions para ejecutar automáticamente los pipelines de pruebas (Jest, Playwright, análisis estático) en cada Push o Pull Request.
+- **Pruebas de Regresión Visual con IA:** Integración de herramientas como Applitools Eyes o Percy junto a Playwright para validar la interfaz de React con Inteligencia Artificial.
+- **Ejecución Distribuida en la Nube:** Configuración de BrowserStack o Sauce Labs para escalar la ejecución de pruebas E2E.
+- **Observabilidad (Shift-Right Testing):** Implementación de Sentry para monitoreo de errores en tiempo real.
+
 
 ## ⚖️ Licencia
 Este proyecto está bajo la **Licencia MIT**. Esto significa que puedes usar el código para fines educativos siempre que se mantenga la autoría original. 

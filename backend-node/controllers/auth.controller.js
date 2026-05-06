@@ -36,12 +36,12 @@ export const register = async (req, res) => {
 
     const tokenSaved = await newToken.save();
 
-      sendVerificationEmail({
-        email: userSaved.email,
-        username: userSaved.username,
-        token: verificationToken,
-        userId: userSaved._id
-      })
+    sendVerificationEmail({
+      email: userSaved.email,
+      username: userSaved.username,
+      token: verificationToken,
+      userId: userSaved._id
+    });
       
     res.status(201).json({
       username: userSaved.username,
@@ -125,11 +125,11 @@ export const resendEmail = async (req, res) =>{
     await newToken.save();
 
     sendVerificationEmail({
-        email: user.email,
-        username: user.username,
-        token: verificationToken,
-        userId: user._id
-      })
+      email: user.email,
+      username: user.username,
+      token: verificationToken,
+      userId: user._id
+    });
 
     res.status(200).json({ 
       message: 'Se ha enviado un nuevo enlace de verificación a tu correo.' 
